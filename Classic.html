@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+
+<!--
+
+See additional libraries, guides, and examples at:
+
+ - https://developer.leapmotion.com/downloads/javascript
+ - https://developer.leapmotion.com/getting-started/javascript
+ - https://developer.leapmotion.com/gallery/tags/javascript
+
+-->
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Classic Mode</title>
+<script src="https://js.leapmotion.com/leap-0.6.4.min.js"></script>
+
+<script src="leap-plugins-0.1.11.min.js"></script>
+<script src="three.min.js"></script>
+
+
+<script>
+var fingerNote=[null, null, null, null, null, null, null, null, null, null, null]
+//[left thumb, left index, left middle, left ring, left pinky, right thumb, right index, right middle, right ring, right pinky]
+//GOOD RESOURCE PAPER: http://dl.acm.org/citation.cfm?id=2618020&CFID=676775092&CFTOKEN=55172717
+var playing=false;
+// Store frame for motion functions
+var previousFrame = null;
+var paused = false;
+var pauseOnGesture = false;
+
+// Setup Leap loop with frame callback function
+var controllerOptions = {enableGestures: true};
+
+// to use HMD mode:
+// controllerOptions.optimizeHMD = true;
+
+Leap.loop(controllerOptions, function(frame) {
+  if (paused) {
+    return; // Skip this update
+  }
+
+
+
+  var handString = "";
+  if (frame.hands.length > 0) {
+    for (var i = 0; i < frame.hands.length; i++) {
+      var hand = frame.hands[i];
+
+      // IDs of pointables associated with this hand
+      if (hand.pointables.length > 0) {
+        var fingerIds = [];
+        for (var j = 0; j < hand.pointables.length; j++) {
+          var pointable = hand.pointables[j];
+            fingerIds.push(pointable.id);
+        }
+        if (fingerIds.length > 0) {
+          handString += "Fingers IDs: " + fingerIds.join(", ") + "<br />";
+        }
+      }
+
+     handString += "</div>";
+    }
+  }
+  else {
+    handString += "No hands";
+  }
+
+  // Display Pointable (finger and tool) object data
+  var pointableString = "";
+  if (frame.pointables.length > 0) {
+    var fingerTypeMap = ["Thumb", "Index finger", "Middle finger", "Ring finger", "Pinky finger"];
+    
+    var boneTypeMap = ["Metacarpal", "Proximal phalanx", "Intermediate phalanx", "Distal phalanx"];
+    var inPlay=[]
+    for (var i = 0; i < frame.pointables.length; i++) {
+      var pointable = frame.pointables[i];
+
+
+if(!pointable.tool){//so basically if its a hand and not a tool
+       
+        var whichFinger=fingerTypeMap[pointable.type]+"";
+          var whichHand=pointable.hand().type+"";
+          var C3=document.getElementById("C3");
+          var D3=document.getElementById("D3");
+          var E3=document.getElementById("E3");
+          var F3=document.getElementById("F3");
+          var G3=document.getElementById("G3");
+          var A3=document.getElementById("A3");
+          var B3=document.getElementById("B3");
+
+          var C4=document.getElementById("C4");
+          var D4=document.getElementById("D4");
+          var E4=document.getElementById("E4");
+          var F4=document.getElementById("F4");
+          var G4=document.getElementById("G4");
+          var A4=document.getElementById("A4");
+          var B4=document.getElementById("B4");
+
+          var C5=document.getElementById("C5");
+          var D5=document.getElementById("D5");
+          var E5=document.getElementById("E5");
+          var F5=document.getElementById("F5");
+          var G5=document.getElementById("G5");
+          var A5=document.getElementById("A5");
+          var B5=document.getElementById("B5");
+
+          var Db3=document.getElementById("Db3");
+          var Eb3=document.getElementById("Eb3");
+          var Gb3=document.getElementById("Gb3");
+          var Ab3=document.getElementById("Ab3");
+          var Bb3=document.getElementById("Bb3");
+
+          var Db4=document.getElementById("Db4");
+          var Eb4=document.getElementById("Eb4");
+          var Gb4=document.getElementById("Gb4");
+          var Ab4=document.getElementById("Ab4");
+          var Bb4=document.getElementById("Bb4");
+
+          var Db5=document.getElementById("Db5");
+          var Eb5=document.getElementById("Eb5");
+          var Gb5=document.getElementById("Gb5");
+          var Ab5=document.getElementById("Ab5");
+          var Bb5=document.getElementById("Bb5");
+          //85 is start of white key, 105 is end of all keys, 290 is the height    
+       if(pointable.tipPosition.length>0 && pointable.tipPosition[1]<290 && pointable.tipPosition[2]<85 && pointable.tipPosition[2]>-105 && pointable.tipPosition[0]<250 && pointable.tipPosition[0]>-280){
+          
+          if(pointable.tipPosition[2]>10){
+            //this is where we put white key things
+            if(pointable.tipPosition[0]<-260){
+              C3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=C3){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=C3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=C3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=C3
+              }
+            }
+            else if(pointable.tipPosition[0]<-230){
+              D3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=D3){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=D3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=D3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=D3
+              }
+            }
+            
+            else if(pointable.tipPosition[0]<-207){
+              E3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=E3){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=E3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=E3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=E3
+              }
+            }
+            
+            else if(pointable.tipPosition[0]<-180){
+              F3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=F3){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=F3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=F3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=F3
+              }
+            }
+            else if(pointable.tipPosition[0]<-160){
+              G3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=G3){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=G3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=G3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=G3
+              }
+            }
+            else if(pointable.tipPosition[0]<-140){
+              A3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=A3){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=A3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=A3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=A3
+              }
+            }
+            else if(pointable.tipPosition[0]<-120){
+              B3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=B3){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=B3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=B3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=B3
+              }
+            }
+            else if(pointable.tipPosition[0]<-97){
+              C4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=C4){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=C4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=C4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=C4
+              }
+            }
+            else if(pointable.tipPosition[0]<-75){
+              D4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=D4){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=D4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=D4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=D4
+              }
+            }
+            else if(pointable.tipPosition[0]<-50){
+              E4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=E4){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=E4
+              }
+              else{if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=E4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=E4
+              }
+            }
+            else if(pointable.tipPosition[0]<-20){
+              F4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=F4){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=F4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=F4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=F4
+              }
+            }
+            else if(pointable.tipPosition[0]<-0){
+              G4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=G4){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=G4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=G4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=G4
+              }
+            }
+            else if(pointable.tipPosition[0]<20){
+              A4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=A4){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=A4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=A4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=A4
+              }
+            }
+            else if(pointable.tipPosition[0]<50){
+              B4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=B4){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=B4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=B4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=B4
+              }
+            }
+            else if(pointable.tipPosition[0]<75){
+              C5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=C5){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=C5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=C5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=C5
+              }
+            }
+            else if(pointable.tipPosition[0]<97){
+              D5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=D5){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=D5
+              }
+              else{if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=D5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=D5
+              }
+
+            }
+            else if(pointable.tipPosition[0]<120){
+              E5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=E5){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=E5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=E5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=E5
+              }
+
+            }
+            else if(pointable.tipPosition[0]<140){
+              F5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=F5){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=F5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=F5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=F5
+              }
+
+            }
+            else if(pointable.tipPosition[0]<165){
+              G5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=G5){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=G5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=G5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=G5
+              }
+
+            }
+            else if(pointable.tipPosition[0]<190){
+              A5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=A5){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=A5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=A5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=A5
+              }
+
+            }
+            else if(pointable.tipPosition[0]<207){
+              B5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=B5){
+                fingerNote[pointable.type].pause();
+                fingerNote[pointable.type].currentTime=0;
+              }
+                fingerNote[pointable.type]=B5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=B5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=B5
+              }
+
+            }
+
+
+
+            
+          }
+          else{
+            //black key things
+            if(pointable.tipPosition[0]<-230 && pointable.tipPosition[0]>-250){
+              Db3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Db3){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Db3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Db3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Db3
+              }
+            }
+            if(pointable.tipPosition[0]<-205 && pointable.tipPosition[0]>-225){
+              Eb3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Eb3){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Eb3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Eb3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Eb3
+              }
+            }
+            if(pointable.tipPosition[0]<-163 && pointable.tipPosition[0]>-190){
+              Gb3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Gb3){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Gb3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Gb3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Gb3
+              }
+            }
+            if(pointable.tipPosition[0]<-143 && pointable.tipPosition[0]>-170){
+              Ab3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Ab3){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Ab3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Ab3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Ab3
+              }
+            }
+            if(pointable.tipPosition[0]<-123 && pointable.tipPosition[0]>-150){
+              Bb3.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Bb3){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Bb3
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Bb3){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Bb3
+              }
+            }
+if(pointable.tipPosition[0]<-70 && pointable.tipPosition[0]>-100){
+              Db4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Db4){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Db4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Db4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Db4
+              }
+            }
+            if(pointable.tipPosition[0]<-50 && pointable.tipPosition[0]>-80){
+              Eb4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Eb4){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Eb4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Eb4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Eb4
+              }
+            }
+            if(pointable.tipPosition[0]<0 && pointable.tipPosition[0]>-30){
+              Gb4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Gb4){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Gb4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Gb4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Gb4
+              }
+            }
+            if(pointable.tipPosition[0]<20 && pointable.tipPosition[0]>-10){
+              Ab4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Ab4){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Ab4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Ab4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Ab4
+              }
+            }
+            if(pointable.tipPosition[0]<40 && pointable.tipPosition[0]>10){
+            Bb4.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Bb4){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Bb4
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Bb4){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Bb4
+              }
+            }
+            if(pointable.tipPosition[0]<90 && pointable.tipPosition[0]>70){
+              Db5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Db5){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Db5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Db5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Db5
+              }
+            }
+            if(pointable.tipPosition[0]<110 && pointable.tipPosition[0]>90){
+              Eb5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Eb5){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Eb5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Eb5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Eb5
+              }
+            }
+            if(pointable.tipPosition[0]<150 && pointable.tipPosition[0]>130){
+              Gb5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Gb5){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Gb5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Gb5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Gb5
+              }
+            }
+            if(pointable.tipPosition[0]<180 && pointable.tipPosition[0]>150){
+              Ab5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Ab5){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Ab5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Ab5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Ab5
+              }
+            }
+            if(pointable.tipPosition[0]<200 && pointable.tipPosition[0]>180){
+              Bb5.play();
+              if(whichHand=="left"){
+                if(fingerNote[pointable.type]!=null&&fingerNote[pointable.type]!=Bb5){
+                  fingerNote[pointable.type].pause();
+                  fingerNote[pointable.type].currentTime=0;
+                }
+                fingerNote[pointable.type]=Bb5
+              }
+              else{
+                if(fingerNote[pointable.type+5]!=null&&fingerNote[pointable.type+5]!=Bb5){
+                fingerNote[pointable.type+5].pause();
+                fingerNote[pointable.type+5].currentTime=0;
+              }
+                fingerNote[pointable.type+5]=Bb5
+              }
+            }
+          }
+         
+       
+        }
+
+        else{
+
+          if(whichHand=="left"){
+            if(fingerNote[pointable.type]!=null){
+              fingerNote[pointable.type].pause();
+              fingerNote[pointable.type].currentTime=0;
+              fingerNote[pointable.type]=null;
+              
+            }
+          }
+          else{
+            if(fingerNote[pointable.type+5]!=null){
+              fingerNote[pointable.type+5].pause();
+              fingerNote[pointable.type+5].currentTime=0;
+              fingerNote[pointable.type+5]=null;
+              
+            }
+          }
+
+          
+        }
+        
+       
+        pointableString += "</div>";
+      }
+    }
+  }
+  else {
+    pointableString += "<div>No pointables</div>";
+  }
+
+  if (frame.gestures.length > 0) {
+
+
+    for (var i = 0; i < frame.gestures.length; i++) {
+      var gesture = frame.gestures[i];
+
+    }
+  }
+
+
+  // Store frame for motion functions
+  previousFrame = frame;
+})
+
+function vectorToString(vector, digits) {
+
+  if (typeof digits === "undefined") {
+    digits = 1;
+  }
+  return "(" + vector[0].toFixed(digits) + ", "
+             + vector[1].toFixed(digits) + ", "
+             + vector[2].toFixed(digits) + ")";
+}
+
+function togglePause() {
+  console.log("hi");
+  paused = !paused;
+
+  if (paused) {
+    document.getElementById("pause").innerText = "Resume";
+
+  } else {
+    document.getElementById("pause").innerText = "Pause";
+  }
+}
+
+
+
+</script>
+</head>
+<body>
+
+  
+<audio id="C3">
+  
+  <source src="./sounds/Piano.mf.C3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Db3">
+  
+  <source src="./sounds/Piano.mf.Db3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="D3">
+  
+  <source src="./sounds/Piano.mf.D3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Eb3">
+  
+  <source src="./sounds/Piano.mf.Eb3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="E3">
+  
+  <source src="./sounds/Piano.mf.E3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="F3">
+  
+  <source src="./sounds/Piano.mf.F3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Gb3">
+  
+  <source src="./sounds/Piano.mf.Gb3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="G3">
+  
+  <source src="./sounds/Piano.mf.G3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Ab3">
+  
+  <source src="./sounds/Piano.mf.Ab3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="A3">
+  
+  <source src="./sounds/Piano.mf.A3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Bb3">
+  
+  <source src="./sounds/Piano.mf.Bb3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="B3">
+  
+  <source src="./sounds/Piano.mf.B3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+    <audio id="C4">
+  
+  <source src="./sounds/Piano.mf.C4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+  <audio id="Db4">
+  
+  <source src="./sounds/Piano.mf.Db4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+  <audio id="D4">
+  
+  <source src="./sounds/Piano.mf.D4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Eb4">
+  
+  <source src="./sounds/Piano.mf.Eb4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+  <audio id="E4">
+  
+  <source src="./sounds/Piano.mf.E4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="F4">
+  
+  <source src="./sounds/Piano.mf.F4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Gb4">
+  
+  <source src="./sounds/Piano.mf.Gb4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="G4">
+  
+  <source src="./sounds/Piano.mf.G4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Ab4">
+  
+  <source src="./sounds/Piano.mf.Ab4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="A4">
+  
+  <source src="./sounds/Piano.mf.A4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Bb4">
+  
+  <source src="./sounds/Piano.mf.Bb4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="B4">
+  
+  <source src="./sounds/Piano.mf.B4.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+ <audio id="C5">
+  
+  <source src="./sounds/Piano.mf.C5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+  <audio id="Db5">
+  
+  <source src="./sounds/Piano.mf.Db5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+  <audio id="D5">
+  
+  <source src="./sounds/Piano.mf.D5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+  <audio id="Eb5">
+  
+  <source src="./sounds/Piano.mf.Eb5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+  <audio id="E5">
+  
+  <source src="./sounds/Piano.mf.E5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="F5">
+  
+  <source src="./sounds/Piano.mf.F5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Gb5">
+  
+  <source src="./sounds/Piano.mf.Gb5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="G5">
+  
+  <source src="./sounds/Piano.mf.G5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Ab5">
+  
+  <source src="./sounds/Piano.mf.Ab5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<audio id="A5">
+  
+  <source src="./sounds/Piano.mf.A5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="Bb5">
+  
+  <source src="./sounds/Piano.mf.Bb5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<audio id="B5">
+  
+  <source src="./sounds/Piano.mf.B5.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+
+<div id="main">
+  
+<h1>Classic Mode</h1>
+ 
+  
+</div>
+</body>
+
+<script>
+
+
+  var baseBoneRotation = (new THREE.Quaternion).setFromEuler(
+      new THREE.Euler(Math.PI / 2, 0, 0)
+  );
+
+  Leap.loop({background: true}, {
+    hand: function (hand) {
+
+      hand.fingers.forEach(function (finger) {
+
+        // This is the meat of the example - Positioning `the cylinders on every frame:
+        finger.data('boneMeshes').forEach(function(mesh, i){
+          var bone = finger.bones[i];
+
+          mesh.position.fromArray(bone.center());
+
+          mesh.setRotationFromMatrix(
+            (new THREE.Matrix4).fromArray( bone.matrix() )
+          );
+
+          mesh.quaternion.multiply(baseBoneRotation);
+        });
+
+        finger.data('jointMeshes').forEach(function(mesh, i){
+          var bone = finger.bones[i];
+
+          if (bone) {
+            mesh.position.fromArray(bone.prevJoint);
+          }else{
+            // special case for the finger tip joint sphere:
+            bone = finger.bones[i-1];
+            mesh.position.fromArray(bone.nextJoint);
+          }
+
+        });
+
+      });
+
+
+
+    renderer.render(scene, camera);
+
+  }})
+    // these two LeapJS plugins, handHold and handEntry are available from leapjs-plugins, included above.
+    // handHold provides hand.data
+    // handEntry provides handFound/handLost events.
+  .use('handHold')
+  .use('handEntry')
+  .on('handFound', function(hand){
+
+    hand.fingers.forEach(function (finger) {
+
+      var boneMeshes = [];
+      var jointMeshes = [];
+
+      finger.bones.forEach(function(bone) {
+
+        // create joints
+
+        // CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded)
+        var boneMesh = new THREE.Mesh(
+            new THREE.CylinderGeometry(3, 3, bone.length*0.6),
+            new THREE.MeshPhongMaterial()
+        );
+
+        boneMesh.material.color.setHex(0xffffcc);//finger bones
+        //boneMesh.material.opacity=0.1
+        scene.add(boneMesh);
+        boneMeshes.push(boneMesh);
+      });
+
+      for (var i = 0; i < finger.bones.length + 1; i++) {
+
+        var jointMesh = new THREE.Mesh(
+            new THREE.SphereGeometry(4.8),//original was 8
+            new THREE.MeshPhongMaterial()
+        );
+
+        jointMesh.material.color.setHex(0xfffcc99);//knuckles
+        //jointMesh.material.opacity=0.1
+        scene.add(jointMesh);
+        jointMeshes.push(jointMesh);
+
+      }
+
+
+      finger.data('boneMeshes', boneMeshes);
+      finger.data('jointMeshes', jointMeshes);
+
+    });
+
+
+  })
+  .on('handLost', function(hand){
+
+    hand.fingers.forEach(function (finger) {
+
+      var boneMeshes = finger.data('boneMeshes');
+      var jointMeshes = finger.data('jointMeshes');
+
+      boneMeshes.forEach(function(mesh){
+        scene.remove(mesh);
+      });
+
+      jointMeshes.forEach(function(mesh){
+        scene.remove(mesh);
+      });
+
+      finger.data({
+        boneMeshes: null,
+        boneMeshes: null
+      });
+
+    });
+
+    renderer.render(scene, camera);
+
+  })
+  .connect();
+
+
+  // all units in mm
+  var initScene = function () {
+    window.scene = new THREE.Scene();
+    window.renderer = new THREE.WebGLRenderer({
+      alpha: true
+    });
+
+    window.renderer.setClearColor(0x000000, 0);
+    window.renderer.setSize(window.innerWidth, window.innerHeight);
+
+    window.renderer.domElement.style.position = 'fixed';
+    window.renderer.domElement.style.top = 0;
+    window.renderer.domElement.style.left = 0;
+    window.renderer.domElement.style.width = '100%';
+    window.renderer.domElement.style.height = '100%';
+
+    document.body.appendChild(window.renderer.domElement);
+
+    var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+    directionalLight.position.set( 0, 2, 1 );
+    window.scene.add(directionalLight);
+
+    window.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+    window.camera.position.fromArray([-30, 500, 400]);
+    window.camera.lookAt(new THREE.Vector3(-30, 275, 0));
+
+    window.addEventListener('resize', function () {
+
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.render(scene, camera);
+
+    }, false);
+    var b=275
+    var w=250
+    scene.add(camera);
+    var geometry2= new THREE.CubeGeometry(20, 10, 120);
+    var material2= new THREE.MeshPhongMaterial({color: 0x4d4d4d});
+    window.b1 = new THREE.Mesh(geometry2, material2);
+    b1.position.set(-245, b,-40);
+    b1.castShadow = true;
+    b1.receiveShadow = true;
+    scene.add(b1);
+
+    window.b2 = new THREE.Mesh(geometry2, material2);
+    b2.position.set(-220,b,-40);
+    b2.castShadow = true;
+    b2.receiveShadow = true;
+    scene.add(b2);
+
+
+    window.b3 = new THREE.Mesh(geometry2, material2);
+    b3.position.set(-180,b,-40);
+    b3.castShadow = true;
+    b3.receiveShadow = true;
+    scene.add(b3);
+
+    window.b4 = new THREE.Mesh(geometry2, material2);
+    b4.position.set(-155,b,-40);
+    b4.castShadow = true;
+    b4.receiveShadow = true;
+    scene.add(b4);
+
+    window.b5 = new THREE.Mesh(geometry2, material2);
+    b5.position.set(-130,b,-40);
+    b5.castShadow = true;
+    b5.receiveShadow = true;
+    scene.add(b5);
+
+
+    window.b6 = new THREE.Mesh(geometry2, material2);
+    b6.position.set(-87,b,-40);
+    b6.castShadow = true;
+    b6.receiveShadow = true;
+    scene.add(b6);
+
+    window.b7 = new THREE.Mesh(geometry2, material2);
+    b7.position.set(-62,b,-40);
+    b7.castShadow = true;
+    b7.receiveShadow = true;
+    scene.add(b7);
+
+
+    window.b8 = new THREE.Mesh(geometry2, material2);
+    b8.position.set(-16,b, -40);
+    b8.castShadow = true;
+    b8.receiveShadow = true;
+    scene.add(b8);
+
+    window.b9 = new THREE.Mesh(geometry2, material2);
+    b9.position.set(8,b,-40);
+    b9.castShadow = true;
+    b9.receiveShadow = true;
+    scene.add(b9);
+
+    window.b10 = new THREE.Mesh(geometry2, material2);
+    b10.position.set(33,b,-40);
+    b10.castShadow = true;
+    b10.receiveShadow = true;
+    scene.add(b10);
+
+
+    window.b11 = new THREE.Mesh(geometry2, material2);
+    b11.position.set(76,b,-40);
+    b11.castShadow = true;
+    b10.receiveShadow = true;
+    scene.add(b11);
+
+    window.b12 = new THREE.Mesh(geometry2, material2);
+    b12.position.set(101,b,-40);
+    b12.castShadow = true;
+    b12.receiveShadow = true;
+    scene.add(b12);
+
+
+    window.b13 = new THREE.Mesh(geometry2, material2);
+    b13.position.set(144,b,-40);
+    b13.castShadow = true;
+    b13.receiveShadow = true;
+    scene.add(b13);
+
+    window.b14 = new THREE.Mesh(geometry2, material2);
+    b14.position.set(168,b,-40);
+    b14.castShadow = true;
+    b14.receiveShadow = true;
+    scene.add(b14);
+
+    window.b15 = new THREE.Mesh(geometry2, material2);
+    b15.position.set(193,b,-40);
+    b15.castShadow = true;
+    b15.receiveShadow = true;
+    scene.add(b15);
+  
+
+    var geometry = new THREE.CubeGeometry(23, 20, 200); //this is our one piano key
+    var material = new THREE.MeshPhongMaterial({color: 0xffffe6});
+    window.w1 = new THREE.Mesh(geometry, material);
+    w1.position.set(-270,w,-20);
+    w1.castShadow = true;
+    w1.receiveShadow = true;
+    scene.add(w1);
+    //x distance of about 40 is good
+    window.w2 = new THREE.Mesh(geometry, material);
+    w2.position.set(-246,w,-20);
+    w2.castShadow = true;
+    w2.receiveShadow = true;
+    scene.add(w2);
+
+    window.w3 = new THREE.Mesh(geometry, material);
+    w3.position.set(-222,w,-20);
+    w3.castShadow = true;
+    w3.receiveShadow = true;
+    scene.add(w3);
+
+    window.w4 = new THREE.Mesh(geometry, material);
+    w4.position.set(-198,w,-20);
+    w4.castShadow = true;
+    w4.receiveShadow = true;
+    scene.add(w4);
+
+    window.w5 = new THREE.Mesh(geometry, material);
+    w5.position.set(-174,w,-20);
+    w5.castShadow = true;
+    w5.receiveShadow = true;
+    scene.add(w5);
+
+    window.w6 = new THREE.Mesh(geometry, material);
+    w6.position.set(-150,w,-20);
+    w6.castShadow = true;
+    w6.receiveShadow = true;
+    scene.add(w6);
+
+    window.w7 = new THREE.Mesh(geometry, material);
+    w7.position.set(-126,w,-20);
+    w7.castShadow = true;
+    w7.receiveShadow = true;
+    scene.add(w7);
+
+    window.w8 = new THREE.Mesh(geometry, material);
+    w8.position.set(-102,w,-20);
+    w8.castShadow = true;
+    w8.receiveShadow = true;
+    scene.add(w8);
+
+    window.w9 = new THREE.Mesh(geometry, material);
+    w9.position.set(-78,w,-20);
+    w9.castShadow = true;
+    w9.receiveShadow = true;
+    scene.add(w9);
+
+    window.w10 = new THREE.Mesh(geometry, material);
+    w10.position.set(-54, w,-20);
+    w10.castShadow = true;
+    w10.receiveShadow = true;
+    scene.add(w10);
+
+    window.w11 = new THREE.Mesh(geometry, material);
+    w11.position.set(-30,w,-20);
+    w11.castShadow = true;
+    w11.receiveShadow = true;
+    scene.add(w11);
+
+    window.w12 = new THREE.Mesh(geometry, material);
+    w12.position.set(-6, w,-20);
+    w12.castShadow = true;
+    w12.receiveShadow = true;
+    scene.add(w12);
+
+    window.w13 = new THREE.Mesh(geometry, material);
+    w13.position.set(18,w,-20);
+    w13.castShadow = true;
+    w13.receiveShadow = true;
+    scene.add(w13);
+
+    window.w14 = new THREE.Mesh(geometry, material);
+    w14.position.set(42,w,-20);
+    w14.castShadow = true;
+    w14.receiveShadow = true;
+    scene.add(w14);
+
+    window.w15 = new THREE.Mesh(geometry, material);
+    w15.position.set(66,w,-20);
+    w15.castShadow = true;
+    w15.receiveShadow = true;
+    scene.add(w15);
+
+    window.w16 = new THREE.Mesh(geometry, material);
+    w16.position.set(90,w,-20);
+    w16.castShadow = true;
+    w16.receiveShadow = true;
+    scene.add(w16);
+
+    window.w17 = new THREE.Mesh(geometry, material);
+    w17.position.set(114,w,-20);
+    w17.castShadow = true;
+    w17.receiveShadow = true;
+    scene.add(w17);
+
+    window.w18 = new THREE.Mesh(geometry, material);
+    w18.position.set(138,w,-20);
+    w18.castShadow = true;
+    w18.receiveShadow = true;
+    scene.add(w18);
+    
+
+    window.w19 = new THREE.Mesh(geometry, material);
+    w19.position.set(162,w,-20);
+    w19.castShadow = true;
+    w19.receiveShadow = true;
+    scene.add(w19);
+
+    window.w20 = new THREE.Mesh(geometry, material);
+    w20.position.set(186,w,-20);
+    w20.castShadow = true;
+    w20.receiveShadow = true;
+    scene.add(w20);
+
+    window.w21 = new THREE.Mesh(geometry, material);
+    w21.position.set(210,w,-20);
+    w21.castShadow = true;
+    w21.receiveShadow = true;
+    scene.add(w21);
+
+
+
+
+
+    renderer.render(scene, camera);
+  };
+
+  initScene();
+
+function vectorToString(vector, digits) {
+  if (typeof digits === "undefined") {
+    digits = 1;
+  }
+  return "(" + vector[0].toFixed(digits) + ", "
+             + vector[1].toFixed(digits) + ", "
+             + vector[2].toFixed(digits) + ")";
+}
+
+  //rotateCube();
+//body {background-color: #bf8040;}
+</script>
+<style>
+body {background-image: url("wood2.png");
+background-repeat:no-repeat;
+
+   background-size:cover;}
+h1   {color: #ffffe6;
+      font-family: cursive;
+      font-size:35px;}
+p    {color: black;}
+</style>
+</html>
